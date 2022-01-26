@@ -1,7 +1,6 @@
 import boto3
 import sys
 import os
-import pprint
 from dotenv import load_dotenv
 
 class Cognito:
@@ -32,7 +31,7 @@ class Cognito:
         
     def admin_confirm_sign_up(self, user):
         try:
-            response = self.cidp.admin_confirm_sign_up(
+            self.cidp.admin_confirm_sign_up(
                 UserPoolId = self.USER_POOL_ID,
                 Username = user['username']
             )
@@ -99,7 +98,6 @@ class Cognito:
             'statusCode': statusCode,
             'body': body
         }
-        pprint.pprint(response)
         return response
 
 cognito = Cognito()
