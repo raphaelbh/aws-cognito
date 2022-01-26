@@ -31,4 +31,4 @@ API: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/
 
 ## Running
 
-`$ python3 ./app/index.py`
+`$ python3 ./app/main.py`
