@@ -72,6 +72,18 @@ class Cognito:
             e = sys.exc_info()[1]
             return self.__response(500, e.args[0])
 
+    def delete_user(self, access_token):
+        try:
+            self.cidp.delete_user(
+                AccessToken = access_token
+            )
+            return self.__response(200, {
+                'userDeleted': True
+            })
+        except:
+            e = sys.exc_info()[1]
+            return self.__response(500, e.args[0])
+
     def global_sign_out(self, access_token):
         try:
             response = self.cidp.global_sign_out(
