@@ -1,9 +1,7 @@
 import boto3
 import sys
-import hmac
-import base64
-import hashlib
 import os
+import pprint
 from dotenv import load_dotenv
 
 class Cognito:
@@ -13,35 +11,37 @@ class Cognito:
         self.AWS_REGION = os.environ.get("AWS_REGION")
         self.USER_POOL_ID = os.environ.get("USER_POOL_ID")
         self.APP_CLIENT_ID = os.environ.get("APP_CLIENT_ID")
-        self.APP_CLIENT_SECRET = os.environ.get("APP_CLIENT_SECRET")
         self.cidp = boto3.client('cognito-idp', region_name=self.AWS_REGION)
     
     def sign_up(self, user):
         try:
             response = self.cidp.sign_up(
                 ClientId = self.APP_CLIENT_ID,
-                SecretHash = self.__get_secret_hash(user['username']),
                 Username = user['username'],
                 Password = user['password'],
                 UserAttributes = user['attributes']
             )
-            print('User created')
-            return response
+            return self.__response(200, {
+                'userSub': response['UserSub'],
+                'codeDeliveryDetails': response['CodeDeliveryDetails'],
+                'userConfirmed': response['UserConfirmed']
+            })
         except:
             e = sys.exc_info()[1]
-            print(e.args[0])
-
+            return self.__response(500, e.args[0])
+        
     def admin_confirm_sign_up(self, user):
         try:
             response = self.cidp.admin_confirm_sign_up(
                 UserPoolId = self.USER_POOL_ID,
                 Username = user['username']
             )
-            print('User confirmed')
-            return response
+            return self.__response(200, {
+                'userConfirmed': True
+            })
         except:
             e = sys.exc_info()[1]
-            print(e.args[0])
+            return self.__response(500, e.args[0])
 
     def initiate_auth(self, user):
         try:
@@ -49,48 +49,45 @@ class Cognito:
                 AuthFlow = 'USER_PASSWORD_AUTH',
                 AuthParameters = {
                     'USERNAME': user['username'],
-                    'PASSWORD': user['password'],
-                    'SECRET_HASH': self.__get_secret_hash(user['username'])
+                    'PASSWORD': user['password']
                 },
                 ClientId = self.APP_CLIENT_ID
             )
-            print('User authorized')
-            return {
+            return self.__response(200, {
                 'access_token': response['AuthenticationResult']['AccessToken'],
                 'id_token': response['AuthenticationResult']['IdToken'],
                 'refresh_token': response['AuthenticationResult']['RefreshToken']
-            }
+            })
         except:
             e = sys.exc_info()[1]
-            print(e.args[0])
+            return self.__response(500, e.args[0])
 
     def get_user(self, access_token):
         try:
-            user = self.cidp.get_user(
+            response = self.cidp.get_user(
                 AccessToken = access_token
             )
-            print('User found')
-            return user
+            return self.__response(200, response['UserAttributes'])
         except:
             e = sys.exc_info()[1]
-            print(e.args[0])
+            return self.__response(500, e.args[0])
 
     def global_sign_out(self, access_token):
         try:
             response = self.cidp.global_sign_out(
                 AccessToken = access_token
             )
-            print('User sign out')
-            return response
+            return self.__response(200, response)
         except:
             e = sys.exc_info()[1]
-            print(e.args[0])
+            return self.__response(500, e.args[0])
 
-    def __get_secret_hash(self, username):
-        msg = username + self.APP_CLIENT_ID
-        dig = hmac.new(str(self.APP_CLIENT_SECRET).encode('utf-8'), 
-            msg = str(msg).encode('utf-8'), digestmod = hashlib.sha256).digest()
-        d2 = base64.b64encode(dig).decode()
-        return d2
+    def __response(self, statusCode, body):
+        response = {
+            'statusCode': statusCode,
+            'body': body
+        }
+        pprint.pprint(response)
+        return response
 
 cognito = Cognito()

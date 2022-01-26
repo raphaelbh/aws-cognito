@@ -1,21 +1,28 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
+
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: poc-cognito
+      AutoVerifiedAttributes:
+        - email
       UsernameAttributes:
         - email
-      MfaConfiguration: "OFF"
+      UserPoolName: poc-cognito
+
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       ClientName: poc-cognito-client
-      UserPoolId:
-        Ref: CognitoUserPool
       ExplicitAuthFlows:
-        - ALLOW_REFRESH_TOKEN_AUTH
-        - ALLOW_CUSTOM_AUTH
-        - ALLOW_USER_SRP_AUTH
         - ALLOW_USER_PASSWORD_AUTH
-      GenerateSecret: true
+        - ALLOW_REFRESH_TOKEN_AUTH
+      UserPoolId: !Ref CognitoUserPool
+
+Outputs:
+
+  CognitoUserPool:
+    Value: !Ref CognitoUserPool
+
+  CognitoUserPoolClient:
+    Value: !Ref CognitoUserPoolClient

@@ -20,7 +20,7 @@ API: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/
 - python (https://www.python.org/)
 
 ## Setup
-1. Create stack through cloud formation file (cloudformatino/stack.yml)
+1. Create stack through cloud formation file (cloudformation/stack.yml)
 
 2. Set the follow env variables (app/libs/.env) 
 - AWS_ACCESS_KEY_ID=XXXX
@@ -28,7 +28,6 @@ API: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/
 - AWS_REGION=XXXX
 - USER_POOL_ID=XXXX
 - APP_CLIENT_ID=XXXX
-- APP_CLIENT_SECRET=XXXX
 
 ## Running
 
