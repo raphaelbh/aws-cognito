@@ -52,7 +52,6 @@ Set the follow env variables (./application/.env)
 ## Usage
 
 ```python
-import utils.fake as fake
 import services.cognito as cognito
 
 user = {
