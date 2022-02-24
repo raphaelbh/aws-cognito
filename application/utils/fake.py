@@ -5,7 +5,7 @@ def user():
     email = user + '@fake.com'
     return {
         'username':  email,
-        'password': 'Mudar@321',
+        'password': 'user@password',
         'attributes': [{
             'Name': 'name',
             'Value': user
