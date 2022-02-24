@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      UserPoolName: poc-cognito
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: poc-cognito-client
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      UserPoolId: !Ref CognitoUserPool
+
+Outputs:
+
+  CognitoUserPool:
+    Value: !Ref CognitoUserPool
+
+  CognitoUserPoolClient:
+    Value: !Ref CognitoUserPoolClient
