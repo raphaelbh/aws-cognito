@@ -29,7 +29,7 @@ aws configure set aws_secret_access_key ${your_aws_secret_access_key}
 aws configure set region ${your_aws_default_region}
 
 # create stack (user pool)
-aws cloudformation create-stack --stack-name poc-cognito --template-body file://cloudformation/stack.yaml
+aws cloudformation create-stack --stack-name poc-cognito --template-body file://infrastructure/cloudformation/stack.yaml
 
 # get user_pool_id and user_pool_client_id
 aws cloudformation describe-stacks --stack-name poc-cognito
