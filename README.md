@@ -23,16 +23,16 @@ Features:
 
 ```bash
 # aws-cli config
-alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
-aws configure set aws_access_key_id ${your_aws_access_key_id}
-aws configure set aws_secret_access_key ${your_aws_secret_access_key}
-aws configure set region ${your_aws_default_region}
+$ alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
+$ aws configure set aws_access_key_id ${your_aws_access_key_id}
+$ aws configure set aws_secret_access_key ${your_aws_secret_access_key}
+$ aws configure set region ${your_aws_default_region}
 
 # create stack (user pool)
-aws cloudformation create-stack --stack-name poc-cognito --template-body file://infrastructure/cloudformation/stack.yaml
+$ aws cloudformation create-stack --stack-name poc-cognito --template-body file://infrastructure/cloudformation/stack.yaml
 
 # get user_pool_id and user_pool_client_id
-aws cloudformation describe-stacks --stack-name poc-cognito
+$ aws cloudformation describe-stacks --stack-name poc-cognito
 ```
     
 ## Environment Variables
