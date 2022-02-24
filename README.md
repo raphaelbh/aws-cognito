@@ -49,7 +49,7 @@ Set the follow env variables (./application/.env)
 
 `USER_POOL_CLIENT_ID`
 
-## Usage / Tests
+## Usage
 
 ```python
 import utils.fake as fake
