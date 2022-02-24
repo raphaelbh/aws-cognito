@@ -39,17 +39,42 @@ aws cloudformation describe-stacks --stack-name poc-cognito
 
 Set the follow env variables (./application/.env)
 
-`AWS_ACCESS_KEY_ID`=${your_aws_access_key_id}
+`AWS_ACCESS_KEY_ID`
 
-`AWS_SECRET_ACCESS_KEY`=${your_aws_secret_access_key}
+`AWS_SECRET_ACCESS_KEY`
 
-`AWS_DEFAULT_REGION`=${your_aws_default_region}
+`AWS_DEFAULT_REGION`
 
-`USER_POOL_ID`=${your_created_user_pool_id}
+`USER_POOL_ID`
 
-`USER_POOL_CLIENT_ID`=${your_created_user_pool_client_id}
+`USER_POOL_CLIENT_ID`
 
 ## Usage / Tests
+
+```python
+import utils.fake as fake
+import services.cognito as cognito
+
+user = {
+    'username':  "john@poc.com",
+    'password': 'john@password',
+    'attributes': [{
+        'Name': 'name',
+        'Value': "John Doe"
+    }, {
+        'Name': 'email',
+        'Value': "john@poc.com"
+    }]
+}
+
+cognito.sign_up(user)
+cognito.admin_confirm_sign_up(user)
+
+response = cognito.initiate_auth(user)
+access_token = response['body']['access_token']
+```
+
+## Tests
 
 ```bash
 $ export PYTHONPATH=application 
